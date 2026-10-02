@@ -1,0 +1,58 @@
+[project]
+name = "itemctl"
+version = "0.1.0"
+description = "Markdown item stores with YAML frontmatter, described by store.toml."
+authors = [
+    { name = "gere", email = "3168512+Gerenuk@users.noreply.github.com" }
+]
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.14"
+dependencies = [
+    "ruamel-yaml>=0.19.1",
+    "ruamel-yaml-clib>=0.2.15",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.168.1",
+    "import-linter>=2.15",
+    "pytest>=9.1.1",
+    "ruff>=0.16.9",
+]
+
+[project.scripts]
+itemctl = "itemctl.entry:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "BLE", "S110"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
+
+[tool.importlinter]
+root_package = "itemctl"
+
+[[tool.importlinter.contracts]]
+name = "layers"
+type = "layers"
+layers = [
+    "itemctl.entry",
+    "itemctl.cli",
+    "itemctl.hooks",
+    "itemctl.store | itemctl.landing",
+    "itemctl.changes | itemctl.validate | itemctl.render_index",
+    "itemctl.schema | itemctl.record",
+    "itemctl.fsio | itemctl.gitio",
+    "itemctl.model | itemctl.scope",
+]

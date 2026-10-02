@@ -1,0 +1,41 @@
+format_version = 1
+id_prefix = "FR"
+git_commit = true
+
+[kinds.friction]
+dir = "."
+dedup_key = ["component"]
+sections = ["Occurrences"]
+index = ["id", "title", "state", "component"]
+max_age_days = 30
+
+[kinds.friction.fields]
+title     = "str"
+component = "str"
+fixing_by = "str"
+fixed_in  = "str"
+outcome   = ["fixed", "declined"]
+tags      = "list"
+
+[kinds.friction.states]
+open          = { requires = ["title", "component"] }
+worked-around = { requires = ["title", "component"] }
+fixing        = { requires = ["fixing_by"], only_here = ["fixing_by"] }
+resolved      = { requires = ["outcome", "fixed_in"], only_here = ["outcome"], terminal = true }
+
+[kinds.task]
+attachments = true
+
+[kinds.task.fields]
+title      = "str"
+blocked_by = "ref"
+trigger    = "str"
+priority   = "int"
+urgent     = "bool"
+due        = "date"
+at         = "datetime"
+
+[kinds.task.states]
+todo = {}
+parked = { requires_any = ["blocked_by", "trigger"] }
+done = { terminal = true }
